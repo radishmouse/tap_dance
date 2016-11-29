@@ -13,20 +13,17 @@ module TapDance
       @brews = brews
     end
 
-    def tap(*args)
-      if args.last.is_a? Hash
-        args.last.merge!(:definition => self)
-      end
-      @taps << Tap.new(*args)
-      @taps.last
-    end
+    def add(type, *args)
+      args.last[:definition] = self if args.last.is_a?(Hash)
 
-    def brew(*args)
-      if args.last.is_a? Hash
-        args.last.merge!(:definition => self)
+      case type
+      when :tap
+        @taps << Tap.new(*args)
+        @taps.last
+      when :brew
+        @brews << Brew.new(*args)
+        @brews.last
       end
-      @brews << Brew.new(*args)
-      @brews.last
     end
 
     def tap_named(name)
